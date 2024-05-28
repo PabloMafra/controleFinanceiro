@@ -1,17 +1,19 @@
 import React from "react";
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Text, ViewStyle, StyleProp } from "react-native";
 import IconeTransporte from "react-native-vector-icons/AntDesign";
 import IconeComida from "react-native-vector-icons/MaterialIcons";
 import IconePix from "react-native-vector-icons/MaterialIcons";
 
 import { IGasto } from "@/src/interfaces/IGastos";
 import formatarValor from "@/src/util/valores";
+import { StyleProps } from "react-native-reanimated";
 
 interface GastosProps {
-  gastos: IGasto;
+  gasto: IGasto;
+  style?: StyleProp<ViewStyle>;
 }
 
-const CardGastos: React.FC<GastosProps> = ({ gastos }) => {
+const CardGastos: React.FC<GastosProps> = ({ gasto, style }) => {
   const getIconeCategoria = (idCategoria: number) => {
     switch (idCategoria) {
       case 1:
@@ -24,17 +26,26 @@ const CardGastos: React.FC<GastosProps> = ({ gastos }) => {
   };
 
   return (
-    <View style={styles.itemGastos}>
-      {getIconeCategoria(gastos.idCategoria)}
+    <View style={[styles.itemGastos, style]}>
+      <View style={styles.descricao}>
+        {getIconeCategoria(gasto.idCategoria)}
+        <Text
+          style={styles.textoDescricao}
+          numberOfLines={1}
+          ellipsizeMode="tail"
+        >
+          {gasto.descricao}
+        </Text>
+      </View>
       <View style={styles.valores}>
         <Text style={styles.simboloMoeda}>R$</Text>
         <Text
           style={[
             styles.balanco,
-            { color: gastos.tipo === 0 ? "#2ecc71" : "#e74c3c" },
+            { color: gasto.tipo === 0 ? "#2ecc71" : "#e74c3c" },
           ]}
         >
-          {formatarValor(gastos.valor)}
+          {formatarValor(gasto.valor)}
         </Text>
       </View>
     </View>
@@ -66,6 +77,16 @@ const styles = StyleSheet.create({
   valores: {
     flexDirection: "row",
     alignItems: "center",
+  },
+  descricao: {
+    flexDirection: "row",
+    gap: 15,
+    alignItems: "center",
+    maxWidth: "70%",
+  },
+  textoDescricao: {
+    flexShrink: 1,
+    fontSize: 16,
   },
 });
 

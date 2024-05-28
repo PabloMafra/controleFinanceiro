@@ -3,6 +3,7 @@ export interface IGasto {
   valor: number;
   data: Date;
   tipo: number;
+  descricao: string;
   idCategoria: number;
   idPessoa: number;
   idCartao?: number;

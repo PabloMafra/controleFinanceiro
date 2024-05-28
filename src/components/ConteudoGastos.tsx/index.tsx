@@ -13,6 +13,7 @@ export default function ConteudoGastos(): React.JSX.Element {
       valor: 100,
       data: new Date(),
       tipo: 1,
+      descricao: "Uber",
       idCategoria: 1,
       idCartao: 2,
       idPessoa: 1,
@@ -22,6 +23,7 @@ export default function ConteudoGastos(): React.JSX.Element {
       valor: 300,
       data: new Date(),
       tipo: 1,
+      descricao: "Hamburguer",
       idCategoria: 2,
       idCartao: 3,
       idPessoa: 2,
@@ -31,6 +33,7 @@ export default function ConteudoGastos(): React.JSX.Element {
       valor: 400,
       data: new Date(),
       tipo: 0,
+      descricao: "Caixa Larissa",
       idCategoria: 3,
       idCartao: 4,
       idPessoa: 3,
@@ -40,6 +43,7 @@ export default function ConteudoGastos(): React.JSX.Element {
       valor: 1900,
       data: new Date(),
       tipo: 1,
+      descricao: "Serviços Mão de obraaaaaaaaaaa",
       idCategoria: 3,
       idPessoa: 1,
     },
@@ -48,7 +52,98 @@ export default function ConteudoGastos(): React.JSX.Element {
       valor: 1900,
       data: new Date(),
       tipo: 0,
+      descricao: "Larissa",
       idCategoria: 3,
+      idPessoa: 1,
+    },
+    {
+      id: 6,
+      valor: 100,
+      data: new Date(),
+      tipo: 1,
+      descricao: "Uber",
+      idCategoria: 1,
+      idCartao: 2,
+      idPessoa: 1,
+    },
+    {
+      id: 7,
+      valor: 100,
+      data: new Date(),
+      tipo: 1,
+      descricao: "Uber",
+      idCategoria: 1,
+      idCartao: 2,
+      idPessoa: 1,
+    },
+    {
+      id: 8,
+      valor: 100,
+      data: new Date(),
+      tipo: 1,
+      descricao: "Uber",
+      idCategoria: 1,
+      idCartao: 2,
+      idPessoa: 1,
+    },
+    {
+      id: 9,
+      valor: 100,
+      data: new Date(),
+      tipo: 1,
+      descricao: "Uber",
+      idCategoria: 1,
+      idCartao: 2,
+      idPessoa: 1,
+    },
+    {
+      id: 10,
+      valor: 100,
+      data: new Date(),
+      tipo: 1,
+      descricao: "Uber",
+      idCategoria: 1,
+      idCartao: 2,
+      idPessoa: 1,
+    },
+    {
+      id: 11,
+      valor: 100,
+      data: new Date(),
+      tipo: 1,
+      descricao: "Uber",
+      idCategoria: 1,
+      idCartao: 2,
+      idPessoa: 1,
+    },
+    {
+      id: 12,
+      valor: 100,
+      data: new Date(),
+      tipo: 1,
+      descricao: "Uber",
+      idCategoria: 1,
+      idCartao: 2,
+      idPessoa: 1,
+    },
+    {
+      id: 13,
+      valor: 100,
+      data: new Date(),
+      tipo: 1,
+      descricao: "Uber",
+      idCategoria: 1,
+      idCartao: 2,
+      idPessoa: 1,
+    },
+    {
+      id: 14,
+      valor: 100,
+      data: new Date(),
+      tipo: 1,
+      descricao: "Uber",
+      idCategoria: 1,
+      idCartao: 2,
       idPessoa: 1,
     },
   ];
@@ -56,14 +151,14 @@ export default function ConteudoGastos(): React.JSX.Element {
   return (
     <View style={styles.container}>
       <View style={styles.listaCartoes}>
-        <ListaCartoes />
+        <ListaCartoes gastos={gastos} />
       </View>
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
         {gastos.map((gasto) => {
-          return <CardGastos gastos={gasto} key={gasto.id} />;
+          return <CardGastos gasto={gasto} key={gasto.id} />;
         })}
       </ScrollView>
     </View>
