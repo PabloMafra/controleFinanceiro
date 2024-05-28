@@ -14,6 +14,7 @@ import {
 import Modal from "react-native-modal";
 import SetaVoltar from "react-native-vector-icons/AntDesign";
 import CardGastos from "../CardGastos";
+import { useBackHandler } from "@react-native-community/hooks";
 
 const { width } = Dimensions.get("window");
 

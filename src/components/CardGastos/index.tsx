@@ -5,7 +5,7 @@ import IconeComida from "react-native-vector-icons/MaterialIcons";
 import IconePix from "react-native-vector-icons/MaterialIcons";
 
 import { IGasto } from "@/src/interfaces/IGastos";
-import formatarValor from "@/src/util/valores";
+import { formatarValor } from "@/src/util/valores";
 import { StyleProps } from "react-native-reanimated";
 
 interface GastosProps {

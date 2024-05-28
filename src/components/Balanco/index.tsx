@@ -1,16 +1,37 @@
-import formatarValor from "@/src/util/valores";
-import React from "react";
+import { IGasto } from "@/src/interfaces/IGastos";
+import { formatarValor } from "@/src/util/valores";
+import React, { useMemo } from "react";
 import { View, StyleSheet, Text } from "react-native";
 
-export default function Balanco(): React.JSX.Element {
-  const entrada = 10000;
-  const saida = 5278.23;
-  const lucro = entrada - saida;
+interface MovimentacoesProps {
+  movimentacoes: IGasto[];
+}
 
-  const valores = {
-    entrada,
-    saida,
-    lucro,
+const Balanco: React.FC<MovimentacoesProps> = ({ movimentacoes }) => {
+  const valores = useMemo(() => {
+    if (!movimentacoes) return { entrada: 0, saida: 0, lucro: 0 };
+
+    const entrada = movimentacoes
+      .filter((gasto) => gasto.tipo === 0)
+      .reduce((acc, gasto) => acc + gasto.valor, 0);
+
+    const saida = movimentacoes
+      .filter((gasto) => gasto.tipo === 1)
+      .reduce((acc, gasto) => acc + gasto.valor, 0);
+
+    const lucro = entrada - saida;
+
+    return { entrada, saida, lucro };
+  }, [movimentacoes]);
+
+  const definirCorValores = (entrada: number) => {
+    if (entrada < 0) {
+      return styles.despesas;
+    }
+    if (entrada > 0) {
+      return styles.lucro;
+    }
+    return styles.neutro;
   };
 
   return (
@@ -37,12 +58,12 @@ export default function Balanco(): React.JSX.Element {
         <Text style={styles.itemTitulo}>Lucro</Text>
         <View style={styles.content}>
           <Text style={styles.simboloMoeda}>R$</Text>
-          <Text style={styles.lucro}>{formatarValor(valores.lucro)}</Text>
+          <Text style={definirCorValores(valores.lucro)}>{formatarValor(valores.lucro)}</Text>
         </View>
       </View>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -92,4 +113,10 @@ const styles = StyleSheet.create({
     fontSize: 22,
     color: "#2ecc71",
   },
+  neutro: {
+    fontSize: 22,
+    color: "#bebbbb",
+  },
 });
+
+export default Balanco;
