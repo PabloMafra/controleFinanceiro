@@ -3,11 +3,11 @@ import { View, StyleSheet, Text, ViewStyle, StyleProp } from "react-native";
 import IconeTransporte from "react-native-vector-icons/AntDesign";
 import IconeComida from "react-native-vector-icons/MaterialIcons";
 import IconePix from "react-native-vector-icons/MaterialIcons";
-import { IGasto } from "@/src/interfaces/IGastos";
+import { IMovimentacao } from "@/src/interfaces/IMovimentacao";
 import { formatarValor } from "@/src/util/valores";
 
 interface GastosProps {
-  gasto: IGasto;
+  gasto: IMovimentacao;
   style?: StyleProp<ViewStyle>;
 }
 
@@ -32,7 +32,7 @@ const CardGastos: React.FC<GastosProps> = ({ gasto, style }) => {
           numberOfLines={1}
           ellipsizeMode="tail"
         >
-          {gasto.descricao}
+          {gasto.descricaoMovimentacao}
         </Text>
       </View>
       <View style={styles.valores}>
@@ -40,10 +40,10 @@ const CardGastos: React.FC<GastosProps> = ({ gasto, style }) => {
         <Text
           style={[
             styles.balanco,
-            { color: gasto.tipo === 0 ? "#2ecc71" : "#e74c3c" },
+            { color: gasto.tipoMovimentacao === 0 ? "#2ecc71" : "#e74c3c" },
           ]}
         >
-          {formatarValor(gasto.valor)}
+          {formatarValor(gasto.valorMovimentacao)}
         </Text>
       </View>
     </View>

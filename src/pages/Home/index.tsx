@@ -4,11 +4,11 @@ import Header from "@/src/components/Header";
 import Balanco from "@/src/components/Balanco";
 import ConteudoMovimentacoes from "@/src/components/ConteudoMovimentacoes.tsx";
 import BotaoOpcao from "@/src/components/BotaoOpcao";
-import { IGasto } from "@/src/interfaces/IGastos";
+import { IMovimentacao } from "@/src/interfaces/IMovimentacao";
 import MovimentacoesServices from "@/src/services/MovimentacoesServices";
 
 export default function Home(): React.JSX.Element {
-  const [movimentacoes, setMovimentacoes] = useState<IGasto[]>([]);
+  const [movimentacoes, setMovimentacoes] = useState<IMovimentacao[]>([]);
 
   useEffect(() => {
     const res = MovimentacoesServices.buscarMovimentacoes();

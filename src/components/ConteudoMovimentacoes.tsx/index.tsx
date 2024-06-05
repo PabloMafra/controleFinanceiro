@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { View, StyleSheet, Text, ScrollView, Dimensions } from "react-native";
 import CardGastos from "../CardGastos";
 import ListaCartoes from "../ListaCartoes.tsx";
-import { IGasto } from "@/src/interfaces/IGastos";
+import { IMovimentacao } from "@/src/interfaces/IMovimentacao";
 
 interface MovimentacoesProps {
-  movimentacoes: IGasto[];
+  movimentacoes: IMovimentacao[];
 }
 
 const ConteudoMovimentacoes: React.FC<MovimentacoesProps> = ({

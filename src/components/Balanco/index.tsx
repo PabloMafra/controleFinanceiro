@@ -1,10 +1,10 @@
-import { IGasto } from "@/src/interfaces/IGastos";
+import { IMovimentacao } from "@/src/interfaces/IMovimentacao";
 import { formatarValor } from "@/src/util/valores";
 import React, { useMemo } from "react";
 import { View, StyleSheet, Text } from "react-native";
 
 interface MovimentacoesProps {
-  movimentacoes: IGasto[];
+  movimentacoes: IMovimentacao[];
 }
 
 const Balanco: React.FC<MovimentacoesProps> = ({ movimentacoes }) => {
@@ -12,12 +12,12 @@ const Balanco: React.FC<MovimentacoesProps> = ({ movimentacoes }) => {
     if (!movimentacoes) return { entrada: 0, saida: 0, lucro: 0 };
 
     const entrada = movimentacoes
-      .filter((gasto) => gasto.tipo === 0)
-      .reduce((acc, gasto) => acc + gasto.valor, 0);
+      .filter((gasto) => gasto.tipoMovimentacao === 0)
+      .reduce((acc, gasto) => acc + gasto.valorMovimentacao, 0);
 
     const saida = movimentacoes
-      .filter((gasto) => gasto.tipo === 1)
-      .reduce((acc, gasto) => acc + gasto.valor, 0);
+      .filter((gasto) => gasto.tipoMovimentacao === 1)
+      .reduce((acc, gasto) => acc + gasto.valorMovimentacao, 0);
 
     const lucro = entrada - saida;
 
@@ -58,7 +58,9 @@ const Balanco: React.FC<MovimentacoesProps> = ({ movimentacoes }) => {
         <Text style={styles.itemTitulo}>Lucro</Text>
         <View style={styles.content}>
           <Text style={styles.simboloMoeda}>R$</Text>
-          <Text style={definirCorValores(valores.lucro)}>{formatarValor(valores.lucro)}</Text>
+          <Text style={definirCorValores(valores.lucro)}>
+            {formatarValor(valores.lucro)}
+          </Text>
         </View>
       </View>
     </View>

@@ -1,4 +1,4 @@
-import { IGasto } from "@/src/interfaces/IGastos";
+import { IMovimentacao } from "@/src/interfaces/IMovimentacao";
 import React, { useState, useMemo, useEffect } from "react";
 import {
   FlatList,
@@ -28,7 +28,7 @@ interface Cartao {
 
 interface CartoesProps {
   cartoes?: Cartao[];
-  gastos?: IGasto[];
+  gastos?: IMovimentacao[];
 }
 
 const Card: React.FC<{ cartao: Cartao; onPress?: () => void }> = ({
