@@ -3,10 +3,8 @@ import { View, StyleSheet, Text, ViewStyle, StyleProp } from "react-native";
 import IconeTransporte from "react-native-vector-icons/AntDesign";
 import IconeComida from "react-native-vector-icons/MaterialIcons";
 import IconePix from "react-native-vector-icons/MaterialIcons";
-
 import { IGasto } from "@/src/interfaces/IGastos";
 import { formatarValor } from "@/src/util/valores";
-import { StyleProps } from "react-native-reanimated";
 
 interface GastosProps {
   gasto: IGasto;

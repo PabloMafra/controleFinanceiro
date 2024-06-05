@@ -9,7 +9,8 @@ npm-debug.*
 *.mobileprovision
 *.orig.*
 web-build/
-
+*.sql
+src/pages/Home/movimentacoes+api.ts
 # macOS
 .DS_Store
 
