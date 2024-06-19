@@ -113,7 +113,7 @@ const ListaCartoes: React.FC<CartoesProps> = ({ cartoes, gastos }) => {
 
   const totalGastos = useMemo(() => {
     if (!gastos) return 0;
-    return gastos.reduce((acc, gasto) => acc + gasto.valor, 0);
+    return gastos.reduce((acc, gasto) => acc + gasto.valorMovimentacao, 0);
   }, [gastos]);
 
   useEffect(() => {
@@ -183,7 +183,7 @@ const ListaCartoes: React.FC<CartoesProps> = ({ cartoes, gastos }) => {
               {gastos?.map((gasto) => {
                 return (
                   <CardGastos
-                    gasto={gasto}
+                    movimentacao={gasto}
                     key={gasto.id}
                     style={styles.cardGastos}
                   />

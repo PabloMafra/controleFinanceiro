@@ -1,5 +1,5 @@
 import { IMovimentacao } from "@/src/interfaces/IMovimentacao";
-import { formatarValor } from "@/src/util/valores";
+import { formatarValor } from "@/src/shared/util/valores";
 import React, { useMemo } from "react";
 import { View, StyleSheet, Text } from "react-native";
 

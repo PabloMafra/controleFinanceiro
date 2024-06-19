@@ -8,6 +8,5 @@ export interface IMovimentacao {
   diaMovimentacao: Date;
   banco: string;
   numeroCartao: number;
-
   idCategoria: number;
 }

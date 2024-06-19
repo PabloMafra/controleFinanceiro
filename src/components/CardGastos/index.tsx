@@ -4,35 +4,52 @@ import IconeTransporte from "react-native-vector-icons/AntDesign";
 import IconeComida from "react-native-vector-icons/MaterialIcons";
 import IconePix from "react-native-vector-icons/MaterialIcons";
 import { IMovimentacao } from "@/src/interfaces/IMovimentacao";
-import { formatarValor } from "@/src/util/valores";
+import { formatarValor } from "@/src/shared/util/valores";
+import { tipoMovimentacao } from "@/src/shared/enum/tipoMovimentacao";
+import { descricaoMovimentacao } from "@/src/shared/enum/descricaoMovimentacao";
+import IconeRoupa from "react-native-vector-icons/Ionicons";
+import IconePresente from "react-native-vector-icons/SimpleLineIcons";
+import IconeCasa from "react-native-vector-icons/FontAwesome6";
+import IconeEletronicos from "react-native-vector-icons/MaterialCommunityIcons";
+import IconeDefault from "react-native-vector-icons/AntDesign";
 
-interface GastosProps {
-  gasto: IMovimentacao;
+interface MovimentacaoProps {
+  movimentacao: IMovimentacao;
   style?: StyleProp<ViewStyle>;
 }
 
-const CardGastos: React.FC<GastosProps> = ({ gasto, style }) => {
+const CardGastos: React.FC<MovimentacaoProps> = ({ movimentacao, style }) => {
   const getIconeCategoria = (idCategoria: number) => {
     switch (idCategoria) {
-      case 1:
+      case descricaoMovimentacao.TRANSPORTE:
         return <IconeTransporte name="car" size={20} color="#000" />;
-      case 2:
+      case descricaoMovimentacao.ALIMENTO:
         return <IconeComida name="lunch-dining" size={20} color="#000" />;
-      default:
+      case descricaoMovimentacao.ROUPAS:
+        return <IconeRoupa name="shirt-outline" size={20} color="#000" />;
+      case descricaoMovimentacao.PRESENTE:
+        return <IconePresente name="bag" size={20} color="#000" />;
+      case descricaoMovimentacao.APARTAMENTO:
+        return <IconeCasa name="house-chimney" size={20} color="#000" />;
+      case descricaoMovimentacao.ELETRONICOS:
+        return <IconeEletronicos name="lunch-dining" size={20} color="#000" />;
+      case descricaoMovimentacao.PIX:
         return <IconePix name="pix" size={20} color="#2EBDAF" />;
+      default:
+        return <IconeDefault name="questioncircleo" size={20} color="#000" />;
     }
   };
 
   return (
     <View style={[styles.itemGastos, style]}>
       <View style={styles.descricao}>
-        {getIconeCategoria(gasto.idCategoria)}
+        {getIconeCategoria(movimentacao?.idCategoria)}
         <Text
           style={styles.textoDescricao}
           numberOfLines={1}
           ellipsizeMode="tail"
         >
-          {gasto.descricaoMovimentacao}
+          {movimentacao?.descricaoMovimentacao}
         </Text>
       </View>
       <View style={styles.valores}>
@@ -40,10 +57,15 @@ const CardGastos: React.FC<GastosProps> = ({ gasto, style }) => {
         <Text
           style={[
             styles.balanco,
-            { color: gasto.tipoMovimentacao === 0 ? "#2ecc71" : "#e74c3c" },
+            {
+              color:
+                movimentacao?.tipoMovimentacao === tipoMovimentacao.ENTRADA
+                  ? "#2ecc71"
+                  : "#e74c3c",
+            },
           ]}
         >
-          {formatarValor(gasto.valorMovimentacao)}
+          {formatarValor(movimentacao?.valorMovimentacao)}
         </Text>
       </View>
     </View>

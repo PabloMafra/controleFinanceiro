@@ -21,7 +21,7 @@ const ConteudoMovimentacoes: React.FC<MovimentacoesProps> = ({
         showsVerticalScrollIndicator={false}
       >
         {movimentacoes.map((movimentacao) => {
-          return <CardGastos gasto={movimentacao} key={movimentacao.id} />;
+          return <CardGastos movimentacao={movimentacao} key={movimentacao.id} />;
         })}
       </ScrollView>
     </View>
