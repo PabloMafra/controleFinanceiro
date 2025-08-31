@@ -10,26 +10,63 @@ import {
   Image,
   ScrollView,
   BackHandler,
+  Animated,
 } from "react-native";
 import Modal from "react-native-modal";
 import SetaVoltar from "react-native-vector-icons/AntDesign";
 import CardGastos from "../CardGastos";
-import { useBackHandler } from "@react-native-community/hooks";
+import { getCorCartao, getNomeCartao } from "@/src/shared/util/funcoes";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/src/store";
+import { fetchCartoes } from "@/src/store/cartaoSlice";
+import { Cartao } from "@/src/services/CartaoService";
 
 const { width } = Dimensions.get("window");
 
-interface Cartao {
-  id: number;
-  banco: string;
-  content: string;
-  bandeira: string;
-  cor: string;
-}
-
 interface CartoesProps {
-  cartoes?: Cartao[];
   gastos?: IMovimentacao[];
 }
+
+const CardSkeleton: React.FC = () => {
+  const shimmerAnimation = React.useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    const animation = Animated.loop(
+      Animated.timing(shimmerAnimation, {
+        toValue: 1,
+        duration: 1500,
+        useNativeDriver: true,
+      })
+    );
+    animation.start();
+
+    return () => animation.stop();
+  }, [shimmerAnimation]);
+
+  const translateX = shimmerAnimation.interpolate({
+    inputRange: [0, 1],
+    outputRange: [-(width * 0.7), width * 0.7],
+  });
+
+  return (
+    <View style={[styles.cardContainer, styles.cardSkeleton]}>
+      <View style={styles.skeletonTitle} />
+      <View style={styles.numeroCartao}>
+        <View style={styles.skeletonNumber} />
+        <View style={styles.skeletonLogo} />
+      </View>
+      
+      <Animated.View
+        style={[
+          styles.shimmerOverlay,
+          {
+            transform: [{ translateX }],
+          },
+        ]}
+      />
+    </View>
+  );
+};
 
 const Card: React.FC<{ cartao: Cartao; onPress?: () => void }> = ({
   cartao,
@@ -37,11 +74,11 @@ const Card: React.FC<{ cartao: Cartao; onPress?: () => void }> = ({
 }) => (
   <Pressable
     onPress={onPress}
-    style={[{ backgroundColor: cartao.cor }, styles.cardContainer]}
+    style={[{ backgroundColor: cartao.cor ?? getCorCartao(cartao.banco) }, styles.cardContainer]}
   >
-    <Text style={styles.cardTitle}>{cartao.banco}</Text>
+    <Text style={styles.cardTitle}>{getNomeCartao(cartao.banco)}</Text>
     <View style={styles.numeroCartao}>
-      <Text style={styles.cardContent}>{cartao.content}</Text>
+      <Text style={styles.cardContent}>{cartao.ultimosNumeros}</Text>
       {cartao.bandeira === "visa" ? (
         <Image
           source={require(`../../../assets/images/visa.webp`)}
@@ -57,51 +94,14 @@ const Card: React.FC<{ cartao: Cartao; onPress?: () => void }> = ({
   </Pressable>
 );
 
-const ListaCartoes: React.FC<CartoesProps> = ({ cartoes, gastos }) => {
-  const cartoesFicticios: Cartao[] = [
-    {
-      id: 0,
-      banco: "XP",
-      content: "**** **** **** 4139",
-      bandeira: "visa",
-      cor: "#000",
-    },
-    {
-      id: 1,
-      banco: "Nubank",
-      content: "**** **** **** 9876",
-      bandeira: "mastercard",
-      cor: "#820ad1",
-    },
-    {
-      id: 2,
-      banco: "PicPay",
-      content: "**** **** **** 9876",
-      bandeira: "mastercard",
-      cor: "#11C76F",
-    },
-    {
-      id: 3,
-      banco: "Itau",
-      content: "**** **** **** 9876",
-      bandeira: "mastercard",
-      cor: "#FF6200",
-    },
-    {
-      id: 4,
-      banco: "Caixa",
-      content: "**** **** **** 9876",
-      bandeira: "visa",
-      cor: "#005CA9",
-    },
-    {
-      id: 5,
-      banco: "Aleatorio",
-      content: "**** **** **** 9876",
-      bandeira: "visa",
-      cor: "#346969",
-    },
-  ];
+const ListaCartoes: React.FC<CartoesProps> = ({ gastos }) => {
+console.log(gastos, 'gastos**')
+  const dispatch = useDispatch<AppDispatch>();
+  const { cartoes, loading, error } = useSelector((state: RootState) => state.cartoes);
+
+  useEffect(() => {
+    dispatch(fetchCartoes());
+  }, [dispatch]);
 
   const [abrirModal, setAbrirModal] = useState<boolean>(false);
   const [selectedCard, setSelectedCard] = useState<Cartao | null>(null);
@@ -111,11 +111,16 @@ const ListaCartoes: React.FC<CartoesProps> = ({ cartoes, gastos }) => {
     setAbrirModal(true);
   };
 
-  const totalGastos = useMemo(() => {
-    if (!gastos) return 0;
-    return gastos.reduce((acc, gasto) => acc + gasto.valorMovimentacao, 0);
-  }, [gastos]);
+const gastosSelecionados = useMemo(() => {
+  if (!gastos || !selectedCard) return [];
+  return gastos.filter(gasto => gasto.idCartao === selectedCard.id);
+}, [gastos, selectedCard]);
 
+const totalGastos = useMemo(() => {
+  return gastosSelecionados.reduce((acc, gasto) => acc + gasto.valor, 0);
+}, [gastosSelecionados]);
+
+  console.log(gastosSelecionados, 'testee')
   useEffect(() => {
     const backAction = () => {
       if (abrirModal) {
@@ -133,16 +138,35 @@ const ListaCartoes: React.FC<CartoesProps> = ({ cartoes, gastos }) => {
     return () => backHandler.remove();
   }, [abrirModal]);
 
+  if (loading) {
+    return (
+      <FlatList
+        data={[1, 2, 3]}
+        renderItem={() => <CardSkeleton />}
+        keyExtractor={(item, index) => `skeleton-${index}`}
+        horizontal
+        snapToOffsets={[...Array(3)].map(
+          (_, i) => i * (width * 0.7 - 40) + (i - 1) * 40
+        )}
+        showsHorizontalScrollIndicator={false}
+        snapToAlignment="start"
+        scrollEventThrottle={16}
+        decelerationRate="fast"
+      />
+    );
+  }
+
   return (
     <>
       <FlatList
-        data={cartoesFicticios}
+        data={cartoes}
         renderItem={({ item }) => (
+          console.log(item, 'item***'),
           <Card cartao={item} onPress={() => handleCardPress(item)} />
         )}
         keyExtractor={(item) => item.id.toString()}
         horizontal
-        snapToOffsets={[...Array(cartoesFicticios.length)].map(
+        snapToOffsets={[...Array(cartoes?.length)].map(
           (_, i) => i * (width * 0.7 - 40) + (i - 1) * 40
         )}
         showsHorizontalScrollIndicator={false}
@@ -180,7 +204,7 @@ const ListaCartoes: React.FC<CartoesProps> = ({ cartoes, gastos }) => {
             </View>
 
             <View>
-              {gastos?.map((gasto) => {
+              {gastosSelecionados?.map((gasto) => {
                 return (
                   <CardGastos
                     movimentacao={gasto}
@@ -249,6 +273,39 @@ const styles = StyleSheet.create({
   cardGastos: {
     borderWidth: 1,
     borderColor: "#949393",
+  },
+  cardSkeleton: {
+    backgroundColor: "#E0E0E0",
+    overflow: "hidden",
+  },
+  skeletonTitle: {
+    height: 28,
+    width: "60%",
+    backgroundColor: "#C0C0C0",
+    borderRadius: 4,
+  },
+  skeletonNumber: {
+    height: 20,
+    width: 80,
+    backgroundColor: "#C0C0C0",
+    borderRadius: 4,
+  },
+  skeletonLogo: {
+    height: 20,
+    width: 50,
+    backgroundColor: "#C0C0C0",
+    borderRadius: 4,
+    marginEnd: 15,
+  },
+  shimmerOverlay: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(255, 255, 255, 0.4)",
+    width: 40,
+    transform: [{ skewX: "-20deg" }],
   },
 });
 
