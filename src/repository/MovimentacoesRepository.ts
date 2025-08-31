@@ -1,95 +1,32 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { IMovimentacao } from "../interfaces/IMovimentacao";
+import axios from 'axios';
 
 class MovimentacoesRepository {
-  buscarMovimentacoes() {
-    const gastos: IMovimentacao[] = [
-      {
-        id: 1,
-        idPessoa: 1,
-        nomePessoa: "Pablo",
-        descricaoMovimentacao: "Uber",
-        tipoMovimentacao: 0,
-        valorMovimentacao: 100,
-        diaMovimentacao: new Date(),
-        banco: "xp",
-        numeroCartao: 4139,
-        idCategoria: 1,
-      },
-      {
-        id: 2,
-        idPessoa: 1,
-        nomePessoa: "Pablo",
-        descricaoMovimentacao: "Uber",
-        tipoMovimentacao: 0,
-        valorMovimentacao: 100,
-        diaMovimentacao: new Date(),
-        banco: "xp",
-        numeroCartao: 4139,
-        idCategoria: 1,
-      },
-      {
-        id: 3,
-        idPessoa: 1,
-        nomePessoa: "Pablo",
-        descricaoMovimentacao: "Uber",
-        tipoMovimentacao: 0,
-        valorMovimentacao: 100,
-        diaMovimentacao: new Date(),
-        banco: "xp",
-        numeroCartao: 4139,
-        idCategoria: 1,
-      },
-      {
-        id: 4,
-        idPessoa: 1,
-        nomePessoa: "Pablo",
-        descricaoMovimentacao: "Uber",
-        tipoMovimentacao: 1,
-        valorMovimentacao: 100,
-        diaMovimentacao: new Date(),
-        banco: "xp",
-        numeroCartao: 4139,
-        idCategoria: 1,
-      },
-      {
-        id: 5,
-        idPessoa: 1,
-        nomePessoa: "Pablo",
-        descricaoMovimentacao: "Uber",
-        tipoMovimentacao: 1,
-        valorMovimentacao: 100,
-        diaMovimentacao: new Date(),
-        banco: "xp",
-        numeroCartao: 4139,
-        idCategoria: 1,
-      },
-      {
-        id: 6,
-        idPessoa: 1,
-        nomePessoa: "Pablo",
-        descricaoMovimentacao: "Uber",
-        tipoMovimentacao: 1,
-        valorMovimentacao: 100,
-        diaMovimentacao: new Date(),
-        banco: "xp",
-        numeroCartao: 4139,
-        idCategoria: 1,
-      },
-      {
-        id: 7,
-        idPessoa: 1,
-        nomePessoa: "Pablo",
-        descricaoMovimentacao: "Uber",
-        tipoMovimentacao: 1,
-        valorMovimentacao: 100,
-        diaMovimentacao: new Date(),
-        banco: "xp",
-        numeroCartao: 4139,
-        idCategoria: 1,
-      },
-    ];
+  async buscarMovimentacoes() {
+    const token = await AsyncStorage.getItem('access_token');
 
+    const response = await axios.get('http://192.168.1.64:3000/transactions', {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+    const gastos: IMovimentacao[] = response.data;
     return gastos;
+  }
+
+  async salvarMovimentacao(movimentacao: any) {
+    const token = await AsyncStorage.getItem('access_token');
+
+    try {
+      await axios.post('http://192.168.1.64:3000/transactions', movimentacao, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+    } catch (error) {
+      console.error("Erro ao salvar movimentação:", error);
+    }
   }
 }
 

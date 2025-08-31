@@ -1,12 +1,8 @@
 export interface IMovimentacao {
   id: number;
-  idPessoa: number;
-  nomePessoa: string;
-  descricaoMovimentacao: string;
-  tipoMovimentacao: number;
-  valorMovimentacao: number;
-  diaMovimentacao: Date;
-  banco: string;
-  numeroCartao: number;
+  tipo: number;
+  valor: number;
+  dia: Date;
   idCategoria: number;
+  idCartao?: number | null;
 }

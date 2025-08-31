@@ -1,8 +1,11 @@
-import React from 'react';
-import Home from '../../src/pages/Home';
+import React from "react";
+import { AuthProvider } from "@/src/context/AuthProvider";
+import AppNavigator from "@/src/components/AppNavigator";
 
 export default function App(): React.JSX.Element {
   return (
-    <Home />
+    <AuthProvider>
+      <AppNavigator />
+    </AuthProvider>
   );
 }

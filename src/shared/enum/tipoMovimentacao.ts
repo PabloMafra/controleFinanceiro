@@ -1,4 +1,4 @@
-export enum tipoMovimentacao {
+export enum TipoMovimentacao {
   ENTRADA = 0,
   SAIDA = 1,
 }

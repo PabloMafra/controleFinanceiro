@@ -5,7 +5,7 @@ import IconeComida from "react-native-vector-icons/MaterialIcons";
 import IconePix from "react-native-vector-icons/MaterialIcons";
 import { IMovimentacao } from "@/src/interfaces/IMovimentacao";
 import { formatarValor } from "@/src/shared/util/valores";
-import { tipoMovimentacao } from "@/src/shared/enum/tipoMovimentacao";
+import { TipoMovimentacao } from "@/src/shared/enum/TipoMovimentacao";
 import { descricaoMovimentacao } from "@/src/shared/enum/descricaoMovimentacao";
 import IconeRoupa from "react-native-vector-icons/Ionicons";
 import IconePresente from "react-native-vector-icons/SimpleLineIcons";
@@ -40,6 +40,27 @@ const CardGastos: React.FC<MovimentacaoProps> = ({ movimentacao, style }) => {
     }
   };
 
+  const getDescricaoCategoria = (idCategoria: number) => {
+    switch (idCategoria) {
+      case descricaoMovimentacao.TRANSPORTE:
+        return "Transporte";
+      case descricaoMovimentacao.ALIMENTO:
+        return "Alimentação";
+      case descricaoMovimentacao.ROUPAS:
+        return "Roupas";
+      case descricaoMovimentacao.PRESENTE:
+        return "Presentes";
+      case descricaoMovimentacao.APARTAMENTO:
+        return "Casa";
+      case descricaoMovimentacao.ELETRONICOS:
+        return "Eletrônicos";
+      case descricaoMovimentacao.PIX:
+        return "Pix";
+      default:
+        return "Outros";
+    }
+  };
+
   return (
     <View style={[styles.itemGastos, style]}>
       <View style={styles.descricao}>
@@ -49,7 +70,7 @@ const CardGastos: React.FC<MovimentacaoProps> = ({ movimentacao, style }) => {
           numberOfLines={1}
           ellipsizeMode="tail"
         >
-          {movimentacao?.descricaoMovimentacao}
+          {getDescricaoCategoria(movimentacao?.idCategoria)}
         </Text>
       </View>
       <View style={styles.valores}>
@@ -59,13 +80,13 @@ const CardGastos: React.FC<MovimentacaoProps> = ({ movimentacao, style }) => {
             styles.balanco,
             {
               color:
-                movimentacao?.tipoMovimentacao === tipoMovimentacao.ENTRADA
+                movimentacao?.tipo === TipoMovimentacao.ENTRADA
                   ? "#2ecc71"
                   : "#e74c3c",
             },
           ]}
         >
-          {formatarValor(movimentacao?.valorMovimentacao)}
+          {formatarValor(movimentacao?.valor)}
         </Text>
       </View>
     </View>

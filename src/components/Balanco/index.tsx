@@ -1,4 +1,5 @@
 import { IMovimentacao } from "@/src/interfaces/IMovimentacao";
+import { TipoMovimentacao } from "@/src/shared/enum/TipoMovimentacao";
 import { formatarValor } from "@/src/shared/util/valores";
 import React, { useMemo } from "react";
 import { View, StyleSheet, Text } from "react-native";
@@ -12,12 +13,12 @@ const Balanco: React.FC<MovimentacoesProps> = ({ movimentacoes }) => {
     if (!movimentacoes) return { entrada: 0, saida: 0, lucro: 0 };
 
     const entrada = movimentacoes
-      .filter((gasto) => gasto.tipoMovimentacao === 0)
-      .reduce((acc, gasto) => acc + gasto.valorMovimentacao, 0);
+      ?.filter((gasto) => gasto.tipo === TipoMovimentacao.ENTRADA)
+      .reduce((acc, gasto) => acc + gasto.valor, 0);
 
     const saida = movimentacoes
-      .filter((gasto) => gasto.tipoMovimentacao === 1)
-      .reduce((acc, gasto) => acc + gasto.valorMovimentacao, 0);
+      ?.filter((gasto) => gasto.tipo === TipoMovimentacao.SAIDA)
+      .reduce((acc, gasto) => acc + gasto.valor, 0);
 
     const lucro = entrada - saida;
 

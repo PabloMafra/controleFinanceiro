@@ -1,4 +1,5 @@
 export enum descricaoMovimentacao {
+  CATEGORIA = 0,
   TRANSPORTE = 1,
   ALIMENTO = 2,
   ROUPAS = 3,
