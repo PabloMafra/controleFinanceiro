@@ -67,13 +67,11 @@ const ConteudoMovimentacoes: React.FC<MovimentacoesProps> = ({
   const [anoSelecionado, setAnoSelecionado] = useState<number | null>(null);
   const [modalVisivel, setModalVisivel] = useState(false);
 
-  // Obter anos únicos das movimentações
   const anosDisponiveis = useMemo(() => {
     const anos = movimentacoes.map((mov) => new Date(mov.dia).getFullYear());
     return [...new Set(anos)].sort((a, b) => b - a);
   }, [movimentacoes]);
 
-  // filtra movimentações por mês e ano
   const movimentacoesFiltradas = useMemo(() => {
     return movimentacoes.filter((mov) => {
       const d = new Date(mov.dia);
@@ -131,6 +129,57 @@ const ConteudoMovimentacoes: React.FC<MovimentacoesProps> = ({
     setModalVisivel(false);
   };
 
+  const conteudoMovimentacoes = () => {
+    if (movimentacoes.length > 0) {
+      return (
+        <>
+          <TouchableOpacity
+            style={styles.botaoMes}
+            onPress={() => setModalVisivel(true)}
+          >
+            <View
+              style={{ flexDirection: "row", alignItems: "center", gap: 8 }}
+            >
+              <Icon name="filter" size={14} color="#fff" />
+              <Text style={styles.textoBotao}>{obterTextoFiltro()}</Text>
+            </View>
+          </TouchableOpacity>
+
+          {grupos.map((grupo) => (
+            <View key={grupo.chave} style={styles.grupoMovimentacoes}>
+              <Text style={styles.data}>{grupo.exibicao}</Text>
+              {grupo.itens.map((mov) => (
+                <CardGastos movimentacao={mov} key={mov.id} />
+              ))}
+            </View>
+          ))}
+        </>
+      );
+    }
+
+    return (
+      <View style={{ alignItems: "center", marginTop: 40, padding: 16 }}>
+        <Icon
+          name="inbox"
+          size={50}
+          color="#ccc"
+          style={{ marginBottom: 16 }}
+        />
+        <Text
+          style={{
+            fontSize: 18,
+            color: "#999",
+            textAlign: "center",
+            lineHeight: 24,
+          }}
+        >
+          Nenhuma movimentação encontrada.{"\n"}{"\n"}Clique no ícone "Adicionar movimentação" para começar a
+          controlar seus gastos!
+        </Text>
+      </View>
+    );
+  };
+
   return (
     <View style={styles.container}>
       <Animated.View
@@ -144,7 +193,6 @@ const ConteudoMovimentacoes: React.FC<MovimentacoesProps> = ({
       >
         <ListaCartoes gastos={movimentacoesFiltradas} />
       </Animated.View>
-
       <Animated.ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
@@ -154,29 +202,10 @@ const ConteudoMovimentacoes: React.FC<MovimentacoesProps> = ({
         )}
         scrollEventThrottle={1}
       >
-        <TouchableOpacity
-          style={styles.botaoMes}
-          onPress={() => setModalVisivel(true)}
-        >
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-            <Icon name="filter" size={14} color="#fff" />
-            <Text style={styles.textoBotao}>{obterTextoFiltro()}</Text>
-          </View>
-        </TouchableOpacity>
-
-        {grupos.map((grupo) => (
-          <View key={grupo.chave} style={styles.grupoMovimentacoes}>
-            <Text style={styles.data}>{grupo.exibicao}</Text>
-            {grupo.itens.map((mov) => (
-              <CardGastos movimentacao={mov} key={mov.id} />
-            ))}
-          </View>
-        ))}
+        {conteudoMovimentacoes()}
       </Animated.ScrollView>
-
       <Modal
         isVisible={modalVisivel}
-        // onBackdropPress={() => setModalVisivel(false)}
         style={{ flex: 1, margin: 0, justifyContent: "center" }}
       >
         <SetaVoltar
@@ -235,7 +264,6 @@ const ConteudoMovimentacoes: React.FC<MovimentacoesProps> = ({
               </ScrollView>
             </View>
 
-            {/* Seleção de Mês */}
             <View style={styles.secaoFiltro}>
               <Text style={styles.subtituloModal}>Mês:</Text>
               <FlatList

@@ -1,37 +1,39 @@
 import React, { useEffect, useState } from "react";
-import { Provider } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { View, StyleSheet } from "react-native";
 import Header from "@/src/components/Header";
 import Balanco from "@/src/components/Balanco";
 import ConteudoMovimentacoes from "@/src/components/ConteudoMovimentacoes.tsx";
 import SecaoOpcoes from "@/src/components/SecaoOpcoes";
-import { IMovimentacao } from "@/src/interfaces/IMovimentacao";
-import MovimentacoesServices from "@/src/services/MovimentacoesServices";
-import { store } from "@/src/store";
+import { AppDispatch, RootState } from "@/src/store";
+import { fetchMovimentacoes } from "@/src/store/movimentacoesSlice";
+import { fetchCartoes } from "@/src/store/cartaoSlice";
 
 export default function Home(): React.JSX.Element {
-  const [movimentacoes, setMovimentacoes] = useState<IMovimentacao[]>([]);
+  const dispatch = useDispatch<AppDispatch>();
+
+  const { movimentacoes, loading, error } = useSelector(
+    (state: RootState) => state.movimentacoes
+  );
 
   useEffect(() => {
-    const fetchData = async () => {
-      const res = await MovimentacoesServices.buscarMovimentacoes();
-      setMovimentacoes(res);
-    };
-    fetchData();
-  }, []);
+    dispatch(fetchMovimentacoes());
+  }, [dispatch]);
 
   const [reloadKey, setReloadKey] = useState(0);
 
-  const forceReload = () => setReloadKey(prev => prev + 1);
+  const forceReload = () => {
+    setReloadKey((prev) => prev + 1);
+    dispatch(fetchMovimentacoes());
+    dispatch(fetchCartoes());
+  };
 
   return (
     <View style={styles.container} key={reloadKey}>
-      <Provider store={store}>
-        <Header teste={forceReload} />
-        <Balanco movimentacoes={movimentacoes} />
-        <SecaoOpcoes />
-        <ConteudoMovimentacoes movimentacoes={movimentacoes}/>
-      </Provider>
+      <Header teste={forceReload} />
+      <Balanco movimentacoes={movimentacoes} />
+      <SecaoOpcoes />
+      <ConteudoMovimentacoes movimentacoes={movimentacoes} />
     </View>
   );
 }

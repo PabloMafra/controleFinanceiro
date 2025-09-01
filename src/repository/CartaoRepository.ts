@@ -14,7 +14,7 @@ class CartaoRepository {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log(response.data, 'responsee***')
+    // console.log(response.data, 'responsee***')
     return response.data;
   }
 

@@ -36,7 +36,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, [])
 
   const login = async (token: string) => {
-    console.log('Salvando token no AsyncStorage:', token);
+    // console.log('Salvando token no AsyncStorage:', token);
     await AsyncStorage.setItem('access_token', token)
     setIsAuthenticated(true)
   }

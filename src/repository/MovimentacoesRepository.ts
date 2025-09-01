@@ -19,11 +19,13 @@ class MovimentacoesRepository {
     const token = await AsyncStorage.getItem('access_token');
 
     try {
-      await axios.post('http://192.168.1.64:3000/transactions', movimentacao, {
+      const response = await axios.post('http://192.168.1.64:3000/transactions', movimentacao, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      })
+      });
+
+      return response.data;
     } catch (error) {
       console.error("Erro ao salvar movimentação:", error);
     }

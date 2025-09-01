@@ -95,7 +95,7 @@ const Card: React.FC<{ cartao: Cartao; onPress?: () => void }> = ({
 );
 
 const ListaCartoes: React.FC<CartoesProps> = ({ gastos }) => {
-console.log(gastos, 'gastos**')
+// console.log(gastos, 'gastos**')
   const dispatch = useDispatch<AppDispatch>();
   const { cartoes, loading, error } = useSelector((state: RootState) => state.cartoes);
 
@@ -120,7 +120,7 @@ const totalGastos = useMemo(() => {
   return gastosSelecionados.reduce((acc, gasto) => acc + gasto.valor, 0);
 }, [gastosSelecionados]);
 
-  console.log(gastosSelecionados, 'testee')
+  // console.log(gastosSelecionados, 'testee')
   useEffect(() => {
     const backAction = () => {
       if (abrirModal) {
@@ -161,7 +161,7 @@ const totalGastos = useMemo(() => {
       <FlatList
         data={cartoes}
         renderItem={({ item }) => (
-          console.log(item, 'item***'),
+          // console.log(item, 'item***'),
           <Card cartao={item} onPress={() => handleCardPress(item)} />
         )}
         keyExtractor={(item) => item.id.toString()}

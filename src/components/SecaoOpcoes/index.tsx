@@ -26,7 +26,7 @@ const SecaoOpcoes: React.FC = () => {
   const handleCloseModal = () => setAbrirModal(false);
   const handleCloseModalCartao = () => setAbrirModalCartao(false);
 
-  const handleSubmitMovimentacao = (data: MovimentacaoData) => {
+  const handleSubmitMovimentacao = () => {
     setAbrirModal(false);
   };
 
@@ -85,7 +85,7 @@ const SecaoOpcoes: React.FC = () => {
           <CartaoModal
             onClose={handleCloseModalCartao}
             onSubmit={(data) => {
-              console.log("Cartão adicionado:", data);
+              // console.log("Cartão adicionado:", data);
               teste(data);
             }}
           />

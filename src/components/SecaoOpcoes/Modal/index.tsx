@@ -10,7 +10,7 @@ import { TipoSelecaoScreen } from "../TipoMovimentacao";
 interface MovimentacaoModalProps {
   userId: string | null;
   onClose: () => void;
-  onSubmit: (data: MovimentacaoData) => void;
+  onSubmit: () => void;
 }
 
 export const MovimentacaoModal: React.FC<MovimentacaoModalProps> = ({
